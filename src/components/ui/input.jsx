@@ -1,9 +1,10 @@
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
 const Input = React.forwardRef(
-  ({ className, type, ...props }, ref) => {
+  ({ className, type = "text", ...props }, ref) => { // Added default type
     return (
       <input
         type={type}
@@ -20,3 +21,4 @@ const Input = React.forwardRef(
 Input.displayName = "Input"
 
 export { Input }
+
