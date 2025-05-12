@@ -1,8 +1,17 @@
 
-import { ShieldCheck, Lock, FileText } from "lucide-react";
+import { ShieldCheck, Lock, FileText, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from "react"; // Import React for useEffect
 
 export default function DataPrivacyPage() {
+  const [lastUpdated, setLastUpdated] = React.useState('');
+
+  React.useEffect(() => {
+    // Set date on client-side to avoid hydration mismatch
+    setLastUpdated(new Date().toLocaleDateString());
+  }, []);
+
+
   return (
     <div className="space-y-12">
       <header className="text-center py-12">
@@ -93,9 +102,10 @@ export default function DataPrivacyPage() {
       <section className="text-center py-12">
         <p className="text-muted-foreground">
           This policy may be updated from time to time. We encourage you to review it periodically.
-          Last updated: {new Date().toLocaleDateString()}.
+          {lastUpdated ? ` Last updated: ${lastUpdated}.` : ' Loading update date...'}
         </p>
       </section>
     </div>
   );
 }
+

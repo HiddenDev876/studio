@@ -5,7 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { MessageSquareQuestion } from "lucide-react";
+import { MessageSquareQuote } from "lucide-react"; // Corrected import
 
 const faqItems = [
   {
@@ -54,7 +54,7 @@ export default function FaqPage() {
   return (
     <div className="space-y-12">
       <header className="text-center py-12">
-        <MessageSquareQuestion className="h-16 w-16 text-primary mx-auto mb-6" />
+        <MessageSquareQuote className="h-16 w-16 text-primary mx-auto mb-6" /> {/* Corrected usage */}
         <h1 className="text-4xl font-bold tracking-tight">Frequently Asked Questions</h1>
         <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
           Find answers to common questions about TextTransformer.

@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { LifeBuoy, BookOpen, Mail, MessageSquareQuestion } from "lucide-react";
+import { LifeBuoy, BookOpen, Mail, MessageSquareQuote } from "lucide-react"; // Corrected import
 import Link from "next/link";
 import {
   Accordion,
@@ -67,7 +67,7 @@ export default function HelpPage() {
         </Card>
         <Card className="text-center shadow-lg">
           <CardHeader>
-            <MessageSquareQuestion className="h-12 w-12 text-primary mx-auto mb-4" />
+            <MessageSquareQuote className="h-12 w-12 text-primary mx-auto mb-4" /> {/* Corrected usage */}
             <CardTitle>FAQ</CardTitle>
           </CardHeader>
           <CardContent>
