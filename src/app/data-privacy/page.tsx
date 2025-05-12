@@ -1,3 +1,4 @@
+'use client'; // Add this directive
 
 import { ShieldCheck, Lock, FileText, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
