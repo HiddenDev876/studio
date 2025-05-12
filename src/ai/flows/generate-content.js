@@ -1,20 +1,19 @@
+
 'use server';
 /**
  * @fileOverview A content generation AI agent.
  *
  * - generateContent - A function that handles the content generation process.
- * - GenerateContentInputSchema - The Zod schema for the input.
- * - GenerateContentOutputSchema - The Zod schema for the output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GenerateContentInputSchema = z.object({
+const GenerateContentInputSchema = z.object({
   prompt: z.string().describe('A short prompt or idea for generating content.'),
 });
 
-export const GenerateContentOutputSchema = z.object({
+const GenerateContentOutputSchema = z.object({
   generatedContent: z.string().describe('The content generated from the prompt.'),
   progress: z.string().describe('A short summary of what has been generated')
 });

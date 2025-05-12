@@ -4,18 +4,16 @@
  * @fileOverview A grammar checking AI agent.
  *
  * - checkGrammar - A function that handles the grammar checking process.
- * - GrammarCheckInputSchema - The Zod schema for the input.
- * - GrammarCheckOutputSchema - The Zod schema for the output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const GrammarCheckInputSchema = z.object({
+const GrammarCheckInputSchema = z.object({
   text: z.string().describe('The text to check for grammar errors.'),
 });
 
-export const GrammarCheckOutputSchema = z.object({
+const GrammarCheckOutputSchema = z.object({
   correctedText: z.string().describe('The text with grammar corrections applied, or the original text if no errors were found.'),
   // Optional: For more detailed feedback, an array of issues could be added.
   // issues: z.array(z.object({

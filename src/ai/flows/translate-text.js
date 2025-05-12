@@ -1,21 +1,20 @@
+
 'use server';
 /**
  * @fileOverview A text translation AI agent.
  *
  * - translateText - A function that handles the text translation process.
- * - TranslateTextInputSchema - The Zod schema for the input.
- * - TranslateTextOutputSchema - The Zod schema for the output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const TranslateTextInputSchema = z.object({
+const TranslateTextInputSchema = z.object({
   text: z.string().describe('The text to translate.'),
   targetLanguage: z.string().describe('The target language for the translation.'),
 });
 
-export const TranslateTextOutputSchema = z.object({
+const TranslateTextOutputSchema = z.object({
   translatedText: z.string().describe('The translated text.'),
 });
 

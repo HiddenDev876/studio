@@ -1,20 +1,19 @@
+
 'use server';
 /**
  * @fileOverview A text improvement AI agent.
  *
  * - improveWriting - A function that handles the text improvement process.
- * - ImproveWritingInputSchema - The Zod schema for the input.
- * - ImproveWritingOutputSchema - The Zod schema for the output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const ImproveWritingInputSchema = z.object({
+const ImproveWritingInputSchema = z.object({
   text: z.string().describe('The text to improve.'),
 });
 
-export const ImproveWritingOutputSchema = z.object({
+const ImproveWritingOutputSchema = z.object({
   improvedText: z.string().describe('The improved text.'),
 });
 

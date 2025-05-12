@@ -4,20 +4,18 @@
  * @fileOverview An AI agent for converting text to speech. (Conceptual)
  *
  * - convertTextToSpeech - A function that handles the text-to-speech process.
- * - TextToSpeechInputSchema - The Zod schema for the input.
- * - TextToSpeechOutputSchema - The Zod schema for the output.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
 
-export const TextToSpeechInputSchema = z.object({
+const TextToSpeechInputSchema = z.object({
   textToSpeak: z.string().describe('The text to convert to speech.'),
   // Optional: voice selection, speed, etc. could be added here
   // language: z.string().optional().describe('The language of the text (e.g., "en-US").'),
 });
 
-export const TextToSpeechOutputSchema = z.object({
+const TextToSpeechOutputSchema = z.object({
   audioDataUri: z.string().describe("A data URI of the generated speech audio. Expected format: 'data:audio/<mimetype>;base64,<encoded_data>'. (Conceptual - actual audio generation not implemented with current model)"),
   message: z.string().optional().describe("A message regarding the conceptual nature of this feature."),
 });
