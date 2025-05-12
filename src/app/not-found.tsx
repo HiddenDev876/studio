@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[calc(100vh-var(--header-height)-var(--footer-height))] text-center py-10 px-4">
+    <div className="flex flex-grow flex-col items-center justify-center text-center py-10 px-4">
       <SearchX className="h-24 w-24 text-primary mb-8" />
       <h1 className="text-5xl font-bold text-foreground mb-4">404 - Page Not Found</h1>
       <p className="text-xl text-muted-foreground mb-8 max-w-md">

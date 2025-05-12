@@ -29,7 +29,12 @@ const prompt = ai.definePrompt({
   name: 'generateContentPrompt',
   input: {schema: GenerateContentInputSchema},
   output: {schema: GenerateContentOutputSchema},
-  prompt: `You are a content creation expert.  Generate content based on the following prompt:\n\nPrompt: {{{prompt}}}`,
+  prompt: `You are a content creation expert.
+Generate content based on the following prompt:
+
+Prompt: {{{prompt}}}
+
+After generating the content, also provide a short summary of what you generated in the 'progress' field. For example: "Generated a blog post outline about AI." or "Created a short story based on the user's idea."`,
 });
 
 const generateContentFlow = ai.defineFlow(
@@ -40,7 +45,12 @@ const generateContentFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await prompt(input);
-    output!.progress = 'Generated content based on the user-provided prompt.';
+    // The prompt now requests the progress field directly.
+    // No need to manually set it here unless overriding is needed.
+    // If the model fails to set it, we can add a fallback:
+    if (!output?.progress) {
+      output!.progress = 'Generated content based on the user-provided prompt.';
+    }
     return output!;
   }
 );
