@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutDashboard, ShieldAlert, Settings, Sun, Moon, SpellCheck } from "lucide-react"; 
+import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutDashboard, ShieldAlert, Settings, Sun, Moon, DollarSign } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
@@ -22,6 +22,7 @@ import {
 const baseNavLinks = [
   { href: "/", label: "Home" },
   { href: "/ai-tools", label: "AI Tools" },
+  { href: "/pricing", label: "Pricing", icon: <DollarSign className="inline-block h-4 w-4 mr-1" /> },
   { href: "/about", label: "About" },
   { href: "/faq", label: "FAQ" },
   { href: "/help", label: "Help" },
@@ -126,8 +127,10 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem onClick={() => alert("Settings page not yet implemented.")}> {/* Placeholder action */}
-                  <Settings className="mr-2 h-4 w-4" /> Settings 
+                <DropdownMenuItem asChild>
+                   <Link href="/settings" className="flex items-center w-full">
+                    <Settings className="mr-2 h-4 w-4" /> Settings
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={toggleLogin}> {/* Mock Logout */}
@@ -204,9 +207,9 @@ export function Navbar() {
                         </SheetClose>
                       )}
                        <SheetClose asChild>
-                        <Button variant="ghost" className="w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" onClick={() => { alert("Settings page not yet implemented."); setIsMobileMenuOpen(false);}}>
+                        <Link href="/settings" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/settings" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
                           <Settings className="inline-block h-5 w-5 mr-3" /> Settings
-                        </Button>
+                        </Link>
                       </SheetClose>
                       <SheetClose asChild>
                         <Button variant="ghost" className="w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" onClick={() => { toggleLogin(); setIsMobileMenuOpen(false);}}>
