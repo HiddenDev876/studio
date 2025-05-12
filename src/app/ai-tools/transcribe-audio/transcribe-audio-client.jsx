@@ -136,7 +136,7 @@ export function TranscribeAudioClient() {
                 </Button>
               </div>
             </FormControl>
-            <FormMessage name="audioFile" /> {/* For general file errors not caught by react-hook-form */}
+            {/* Removed <FormMessage name="audioFile" /> as it's not a react-hook-form field */}
              <p className="text-sm text-muted-foreground mt-1">
               Max file size: {MAX_FILE_SIZE_MB}MB.
             </p>

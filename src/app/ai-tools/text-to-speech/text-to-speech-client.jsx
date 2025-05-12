@@ -91,7 +91,7 @@ export function TextToSpeechClient() {
   return (
     <div className="space-y-6">
        <Alert variant="default" className="bg-accent/20 border-accent/50">
-        <VolumeX className="h-4 w-4 !text-accent-foreground" /> {/* Adjusted icon color */}
+        <VolumeX className="h-4 w-4 text-accent-foreground" />
         <AlertTitle className="text-accent-foreground font-semibold">Conceptual Feature</AlertTitle>
         <AlertDescription className="text-accent-foreground/80">
           This Text-to-Speech tool is for demonstration purposes. Actual audio generation is not implemented with the current AI model. The output below will be a placeholder.

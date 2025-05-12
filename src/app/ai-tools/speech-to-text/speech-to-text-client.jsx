@@ -133,7 +133,7 @@ export function SpeechToTextClient() {
                 </Button>
               </div>
             </FormControl>
-            <FormMessage />
+            {/* <FormMessage /> Removed as audioFile is not a react-hook-form field */}
              <p className="text-sm text-muted-foreground mt-1">
               Max file size: {MAX_FILE_SIZE_MB}MB. Supported types: MP3, WAV, OGG, etc.
             </p>
