@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { LayoutDashboard, UserCircle, Settings, LogOut, Lightbulb, Mail, Edit3, Sparkles, Languages, History } from "lucide-react";
+import { LayoutDashboard, UserCircle, Settings, LogOut, Lightbulb, Mail, Edit3, Sparkles, Languages, History, SpellCheck } from "lucide-react";
 import Link from "next/link";
 import { UserHistoryClient } from "./user-history-client";
 
@@ -14,6 +14,7 @@ const quickAccessTools = [
   { name: "Polish Email", href: "/ai-tools/polish-email", icon: <Mail className="h-5 w-5" /> },
   { name: "Summarize", href: "/ai-tools/summarize", icon: <Edit3 className="h-5 w-5" /> },
   { name: "Generate Content", href: "/ai-tools/generate-content", icon: <Sparkles className="h-5 w-5" /> },
+  { name: "Grammar Check", href: "/ai-tools/grammar-check", icon: <SpellCheck className="h-5 w-5" /> },
 ];
 
 export default function UserDashboardPage() {
@@ -47,7 +48,7 @@ export default function UserDashboardPage() {
           <CardContent className="space-y-2">
             <p><strong>Name:</strong> {user.name}</p>
             <p><strong>Email:</strong> {user.email}</p>
-            <Button variant="outline" size="sm" className="mt-4 w-full">
+            <Button variant="outline" size="sm" className="mt-4 w-full" onClick={() => alert("Edit Profile page/modal not yet implemented.")}>
               <Settings className="mr-2 h-4 w-4" /> Edit Profile
             </Button>
           </CardContent>
@@ -58,7 +59,7 @@ export default function UserDashboardPage() {
             <CardTitle>Quick Access AI Tools</CardTitle>
             <CardDescription>Jump right back into your favorite tools.</CardDescription>
           </CardHeader>
-          <CardContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {quickAccessTools.map((tool) => (
               <Link href={tool.href} key={tool.name} legacyBehavior>
                 <a className="block p-4 border rounded-lg hover:shadow-md transition-shadow bg-card hover:bg-muted/50">
@@ -96,7 +97,7 @@ export default function UserDashboardPage() {
         </CardHeader>
         <CardContent>
           <p><strong>Current Plan:</strong> Free Tier</p>
-          <Button className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground">Upgrade Plan</Button>
+          <Button className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => alert("Subscription management not yet implemented.")}>Upgrade Plan</Button>
         </CardContent>
       </Card>
     </div>

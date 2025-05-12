@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutDashboard, ShieldAlert, Settings, Sun, Moon } from "lucide-react"; 
+import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutDashboard, ShieldAlert, Settings, Sun, Moon, SpellCheck } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetTrigger } from "@/components/ui/sheet";
 import { usePathname } from "next/navigation";
@@ -44,9 +44,11 @@ export function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false); // Mock admin state
 
-  // Simulate login/logout for testing
+  // Simulate login/logout for testing - REMOVE IN PRODUCTION
   const toggleLogin = () => setIsLoggedIn(!isLoggedIn);
-  const toggleAdmin = () => setIsAdmin(!isAdmin);
+  const toggleAdmin = () => {
+    if(isLoggedIn) setIsAdmin(!isAdmin); // Only allow admin toggle if logged in
+  };
 
 
   const currentNavLinks = [...baseNavLinks];
@@ -124,7 +126,7 @@ export function Navbar() {
                     </Link>
                   </DropdownMenuItem>
                 )}
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => alert("Settings page not yet implemented.")}> {/* Placeholder action */}
                   <Settings className="mr-2 h-4 w-4" /> Settings 
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -161,7 +163,7 @@ export function Navbar() {
                     <BotMessageSquare className="h-7 w-7 text-primary" />
                     <span className="text-xl font-bold">TextTransformer</span>
                   </Link>
-                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle> {/* Added sr-only SheetTitle */}
+                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle> 
                   <SheetClose asChild>
                      <Button variant="ghost" size="icon">
                         <X className="h-6 w-6" />
@@ -202,7 +204,7 @@ export function Navbar() {
                         </SheetClose>
                       )}
                        <SheetClose asChild>
-                        <Button variant="ghost" className="w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" onClick={() => { /* Add settings navigation logic here */ setIsMobileMenuOpen(false);}}>
+                        <Button variant="ghost" className="w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" onClick={() => { alert("Settings page not yet implemented."); setIsMobileMenuOpen(false);}}>
                           <Settings className="inline-block h-5 w-5 mr-3" /> Settings
                         </Button>
                       </SheetClose>

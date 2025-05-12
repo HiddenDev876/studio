@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BotMessageSquare, Edit3, Languages, Lightbulb, Mail, Sparkles, Type } from "lucide-react";
+import { ArrowRight, BotMessageSquare, Edit3, Languages, Lightbulb, Mail, Sparkles, Type, SpellCheck, Mic, Volume2, FileAudio } from "lucide-react";
 import Link from "next/link";
 
 const aiTools = [
@@ -40,6 +40,30 @@ const aiTools = [
     description: "Preview your text in different font styles.",
     icon: <Type className="h-10 w-10 text-primary" />,
     href: "/ai-tools/font-transformer",
+  },
+  {
+    name: "Grammar Check",
+    description: "Correct grammar and spelling errors in your text.",
+    icon: <SpellCheck className="h-10 w-10 text-primary" />,
+    href: "/ai-tools/grammar-check",
+  },
+  {
+    name: "Speech to Text",
+    description: "Convert spoken audio into written text.",
+    icon: <Mic className="h-10 w-10 text-primary" />,
+    href: "/ai-tools/speech-to-text",
+  },
+  {
+    name: "Text to Speech (Conceptual)",
+    description: "Convert text into spoken audio (demonstration).",
+    icon: <Volume2 className="h-10 w-10 text-primary" />,
+    href: "/ai-tools/text-to-speech",
+  },
+  {
+    name: "Transcribe Audio File",
+    description: "Upload MP3/WAV and transcribe to English or Hindi.",
+    icon: <FileAudio className="h-10 w-10 text-primary" />,
+    href: "/ai-tools/transcribe-audio",
   },
 ];
 

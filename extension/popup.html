@@ -170,6 +170,18 @@
         <div id="translate-output" class="result-area"></div>
     </div>
 
+    <!-- Grammar Check -->
+    <div class="tool-section">
+        <div class="tool-title">Grammar Check</div>
+        <label for="grammar-input">Text to Check:</label>
+        <textarea id="grammar-input" placeholder="Paste your text here for grammar check..."></textarea>
+        <button id="grammar-button">Check Grammar</button>
+        <div id="grammar-loader" style="display: none;">Processing... <span class="loader"></span></div>
+        <div id="grammar-error" class="error-message" style="display: none;"></div>
+        <label for="grammar-output" style="margin-top: 10px;">Corrected Text:</label>
+        <div id="grammar-output" class="result-area"></div>
+    </div>
+
   </div>
   <script src="popup.js"></script>
 </body>

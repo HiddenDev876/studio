@@ -156,3 +156,23 @@ document.getElementById('translate-button')?.addEventListener('click', async () 
         setLoading(toolPrefix, false);
     }
 });
+
+// Grammar Check
+document.getElementById('grammar-button')?.addEventListener('click', async () => {
+    const toolPrefix = 'grammar';
+    const input = document.getElementById('grammar-input').value;
+    if (!input) {
+        displayError(toolPrefix, { message: "Please enter text to check." });
+        return;
+    }
+    hideError(toolPrefix);
+    setLoading(toolPrefix, true);
+    try {
+        const result = await callApi('/api/ai/grammar-check', { text: input });
+        displayResult(toolPrefix, result.correctedText);
+    } catch (error) {
+        displayError(toolPrefix, error);
+    } finally {
+        setLoading(toolPrefix, false);
+    }
+});

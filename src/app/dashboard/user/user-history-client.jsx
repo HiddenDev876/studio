@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Mail, Edit3, Sparkles, History, FileText } from "lucide-react";
+import { Mail, Edit3, Sparkles, History, FileText, SpellCheck, Languages } from "lucide-react"; // Added SpellCheck, Languages
 import { formatDistanceToNowStrict } from 'date-fns';
 
 const mockHistoryData = [
@@ -41,7 +41,14 @@ const mockHistoryData = [
     toolName: 'Translate Text',
     timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), // 1 week ago
     summary: 'Translated a product description from English to Spanish for market expansion.',
-    icon: <Sparkles className="h-5 w-5 text-primary" />, // Using Sparkles, replace with Languages if available or other suitable.
+    icon: <Languages className="h-5 w-5 text-primary" />, 
+  },
+  {
+    id: '6',
+    toolName: 'Grammar Check',
+    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
+    summary: 'Checked and corrected grammar for a blog post introduction.',
+    icon: <SpellCheck className="h-5 w-5 text-primary" />,
   },
 ];
 
@@ -54,7 +61,7 @@ export function UserHistoryClient() {
     const processedHistory = mockHistoryData.map(item => ({
       ...item,
       formattedTimestamp: formatDistanceToNowStrict(new Date(item.timestamp), { addSuffix: true }),
-    }));
+    })).sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)); // Sort by most recent
     setFormattedHistory(processedHistory);
   }, []);
 
