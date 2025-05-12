@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { LayoutDashboard, Settings, LogOut, Lightbulb, Mail, Edit3, Sparkles, Languages, History, SpellCheck } from "lucide-react";
 import Link from "next/link";
 import { UserHistoryClient } from "./user-history-client";
-import { ProfileCardClient } from "./profile-card-client"; // Import the new client component
+import { ProfileCardClient } from "./profile-card-client"; 
+import { SubscriptionCardClient } from "./subscription-card-client"; // Import the new client component
 
 export const metadata = {
   title: 'User Dashboard - TextTransformer',
@@ -41,7 +42,7 @@ export default function UserDashboardPage() {
       </header>
 
       <div className="grid md:grid-cols-3 gap-6">
-        <ProfileCardClient user={user} /> {/* Use the client component here */}
+        <ProfileCardClient user={user} /> 
 
         <Card className="md:col-span-2 shadow-lg">
           <CardHeader>
@@ -79,16 +80,7 @@ export default function UserDashboardPage() {
           <UserHistoryClient />
         </CardContent>
       </Card>
-       <Card className="shadow-lg">
-        <CardHeader>
-          <CardTitle>Subscription Status</CardTitle>
-           <CardDescription>Manage your subscription plan. (Placeholder)</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <p><strong>Current Plan:</strong> Free Tier</p>
-          <Button className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground" onClick={() => alert("Subscription management not yet implemented.")}>Upgrade Plan</Button>
-        </CardContent>
-      </Card>
+      <SubscriptionCardClient /> {/* Use the new client component here */}
     </div>
   );
 }
