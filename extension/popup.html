@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TextTransformer AI</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      width: 400px;
+      padding: 15px;
+      box-sizing: border-box;
+      background-color: #f8f9fa; /* Light grey background */
+      color: #212529; /* Dark text */
+    }
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #495057; /* Grey label text */
+    }
+    textarea, select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ced4da; /* Light grey border */
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+      background-color: #ffffff; /* White background */
+      color: #495057;
+    }
+    textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+    button {
+      background-color: #0d6efd; /* Primary blue */
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #0b5ed7; /* Darker blue on hover */
+    }
+    button:disabled {
+        background-color: #6c757d; /* Grey when disabled */
+        cursor: not-allowed;
+    }
+    .result-area {
+      background-color: #e9ecef; /* Lighter grey for results */
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      padding: 10px;
+      min-height: 100px;
+      white-space: pre-wrap; /* Keep formatting */
+      word-wrap: break-word;
+      font-size: 14px;
+      color: #495057;
+    }
+    .tool-section {
+        border: 1px solid #dee2e6; /* Slightly darker border for sections */
+        border-radius: 5px;
+        padding: 15px;
+        background-color: #ffffff; /* White background for sections */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+    }
+    .tool-title {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #0d6efd; /* Blue title */
+    }
+    .error-message {
+        color: #dc3545; /* Red for errors */
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    .loader {
+        display: inline-block;
+        border: 3px solid #f3f3f3; /* Light grey */
+        border-top: 3px solid #0d6efd; /* Blue */
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        animation: spin 1s linear infinite;
+        vertical-align: middle;
+        margin-left: 5px;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h3>TextTransformer AI Tools</h3>
+
+    <!-- Polish Email -->
+    <div class="tool-section">
+        <div class="tool-title">Polish Email</div>
+        <label for="polish-input">Email Draft:</label>
+        <textarea id="polish-input" placeholder="Paste your email draft here..."></textarea>
+        <button id="polish-button">Polish</button>
+        <div id="polish-loader" style="display: none;">Processing... <span class="loader"></span></div>
+        <div id="polish-error" class="error-message" style="display: none;"></div>
+        <label for="polish-output" style="margin-top: 10px;">Improved Email:</label>
+        <div id="polish-output" class="result-area"></div>
+    </div>
+
+    <!-- Summarize Content -->
+    <div class="tool-section">
+        <div class="tool-title">Summarize Content</div>
+        <label for="summarize-input">Text to Summarize:</label>
+        <textarea id="summarize-input" placeholder="Paste your long text here..."></textarea>
+        <button id="summarize-button">Summarize</button>
+        <div id="summarize-loader" style="display: none;">Processing... <span class="loader"></span></div>
+        <div id="summarize-error" class="error-message" style="display: none;"></div>
+        <label for="summarize-output" style="margin-top: 10px;">Summary:</label>
+        <div id="summarize-output" class="result-area"></div>
+    </div>
+
+    <!-- Generate Content -->
+    <div class="tool-section">
+        <div class="tool-title">Generate Content</div>
+        <label for="generate-prompt">Prompt:</label>
+        <textarea id="generate-prompt" placeholder="e.g., Write a short story about a robot who discovers music..."></textarea>
+        <button id="generate-button">Generate</button>
+        <div id="generate-loader" style="display: none;">Processing... <span class="loader"></span></div>
+        <div id="generate-error" class="error-message" style="display: none;"></div>
+        <label for="generate-output" style="margin-top: 10px;">Generated Content:</label>
+        <div id="generate-output" class="result-area"></div>
+    </div>
+
+    <!-- Translate Text -->
+    <div class="tool-section">
+        <div class="tool-title">Translate Text</div>
+        <label for="translate-input">Text to Translate:</label>
+        <textarea id="translate-input" placeholder="Enter text here..."></textarea>
+        <label for="translate-language">Target Language:</label>
+        <select id="translate-language">
+            <option value="Spanish">Spanish</option>
+            <option value="French">French</option>
+            <option value="German">German</option>
+            <option value="Italian">Italian</option>
+            <option value="Portuguese">Portuguese</option>
+            <option value="Dutch">Dutch</option>
+            <option value="Russian">Russian</option>
+            <option value="Japanese">Japanese</option>
+            <option value="Korean">Korean</option>
+            <option value="Chinese (Simplified)">Chinese (Simplified)</option>
+            <option value="Arabic">Arabic</option>
+            <option value="Hindi">Hindi</option>
+        </select>
+        <button id="translate-button">Translate</button>
+        <div id="translate-loader" style="display: none;">Processing... <span class="loader"></span></div>
+        <div id="translate-error" class="error-message" style="display: none;"></div>
+        <label for="translate-output" style="margin-top: 10px;">Translation:</label>
+        <div id="translate-output" class="result-area"></div>
+    </div>
+
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
