@@ -1,13 +1,11 @@
+"use client"; // Retain for useTheme, useState, useEffect
 
-"use client";
-
-import Link from "next/link";
+import { Link, useLocation } from "react-router-dom";
+import React from "react"; // Ensure React is imported
 import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutDashboard, ShieldAlert, Settings, Sun, Moon, DollarSign } from "lucide-react"; 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetTrigger } from "@/components/ui/sheet";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import React from "react";
 import { useTheme } from "next-themes";
 import {
   DropdownMenu,
@@ -37,7 +35,8 @@ const guestLinks = [
 ];
 
 export function Navbar() {
-  const pathname = usePathname();
+  const location = useLocation();
+  const pathname = location.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const { theme, setTheme } = useTheme();
   
@@ -80,7 +79,7 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
+        <Link to="/" className="flex items-center gap-2">
           <BotMessageSquare className="h-7 w-7 text-primary" />
           <span className="text-xl font-bold text-foreground">TextTransformer</span>
         </Link>
@@ -90,7 +89,7 @@ export function Navbar() {
           {currentNavLinks.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              to={link.href}
               className={cn(
                 "text-sm font-medium transition-colors hover:text-primary flex items-center",
                 pathname === link.href ? "text-primary" : "text-muted-foreground"
@@ -116,19 +115,19 @@ export function Navbar() {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard/user" className="flex items-center w-full">
+                  <Link to="/dashboard/user" className="flex items-center w-full">
                     <LayoutDashboard className="mr-2 h-4 w-4" /> My Dashboard
                   </Link>
                 </DropdownMenuItem>
                 {isAdmin && (
                   <DropdownMenuItem asChild>
-                    <Link href="/dashboard/admin" className="flex items-center w-full">
+                    <Link to="/dashboard/admin" className="flex items-center w-full">
                        <ShieldAlert className="mr-2 h-4 w-4" /> Admin Panel
                     </Link>
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuItem asChild>
-                   <Link href="/settings" className="flex items-center w-full">
+                   <Link to="/settings" className="flex items-center w-full">
                     <Settings className="mr-2 h-4 w-4" /> Settings
                   </Link>
                 </DropdownMenuItem>
@@ -142,7 +141,7 @@ export function Navbar() {
             <div className="flex gap-2">
               {guestLinks.map(link => (
                  <Button key={link.href} asChild variant={link.href === "/login" ? "outline" : "default"} size="sm">
-                    <Link href={link.href} className="flex items-center">
+                    <Link to={link.href} className="flex items-center">
                       {link.icon} <span className="ml-1">{link.label}</span>
                     </Link>
                   </Button>
@@ -162,7 +161,7 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs bg-background p-0">
             <SheetHeader className="p-6 pb-0 flex flex-row justify-between items-center">
-                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
+                 <Link to="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                     <BotMessageSquare className="h-7 w-7 text-primary" />
                     <span className="text-xl font-bold">TextTransformer</span>
                   </Link>
@@ -178,7 +177,7 @@ export function Navbar() {
                 {currentNavLinks.map((link) => (
                   <SheetClose asChild key={link.href}>
                     <Link
-                      href={link.href}
+                      to={link.href}
                       className={cn(
                         "text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center",
                         pathname === link.href ? "text-primary bg-muted" : "text-foreground"
@@ -195,19 +194,19 @@ export function Navbar() {
                   {isLoggedIn ? (
                     <>
                       <SheetClose asChild>
-                        <Link href="/dashboard/user" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/dashboard/user" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link to="/dashboard/user" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/dashboard/user" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
                           <LayoutDashboard className="inline-block h-5 w-5 mr-3" /> My Dashboard
                         </Link>
                       </SheetClose>
                       {isAdmin && (
                         <SheetClose asChild>
-                           <Link href="/dashboard/admin" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/dashboard/admin" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
+                           <Link to="/dashboard/admin" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/dashboard/admin" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
                             <ShieldAlert className="inline-block h-5 w-5 mr-3" /> Admin Panel
                            </Link>
                         </SheetClose>
                       )}
                        <SheetClose asChild>
-                        <Link href="/settings" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/settings" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
+                        <Link to="/settings" className={cn("text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center", pathname === "/settings" ? "text-primary bg-muted" : "text-foreground")} onClick={() => setIsMobileMenuOpen(false)}>
                           <Settings className="inline-block h-5 w-5 mr-3" /> Settings
                         </Link>
                       </SheetClose>
@@ -221,7 +220,7 @@ export function Navbar() {
                     guestLinks.map(link => (
                       <SheetClose asChild key={link.href}>
                         <Link
-                          href={link.href}
+                          to={link.href}
                           className={cn(
                             "text-base font-medium transition-colors hover:text-primary py-2 px-2 rounded-md flex items-center",
                             pathname === link.href ? "text-primary bg-muted" : "text-foreground"

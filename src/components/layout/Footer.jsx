@@ -1,5 +1,4 @@
-
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { BotMessageSquare } from 'lucide-react';
 
 export function Footer() {
@@ -15,13 +14,13 @@ export function Footer() {
             &copy; {new Date().getFullYear()} TextTransformer. All rights reserved.
           </p>
           <nav className="flex gap-4">
-            <Link href="/data-privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <Link to="/data-privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Data Privacy
             </Link>
-            <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <Link to="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Contact Us
             </Link>
-             <Link href="/extension-info" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+             <Link to="/extension-info" className="text-sm text-muted-foreground hover:text-primary transition-colors">
               Chrome Extension
             </Link>
           </nav>
