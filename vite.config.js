@@ -11,6 +11,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000, // You can change the port if needed
+    port: 9002, // Changed from 3000 to align with package.json
+    host: '0.0.0.0', // Explicitly set host
   }
 })
