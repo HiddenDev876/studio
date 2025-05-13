@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ThemeProvider } from "next-themes"; // next-themes is compatible with React
+// import { ThemeProvider } from "next-themes"; // Temporarily removed
 
 import { Layout } from './components/layout/Layout';
 import { Toaster } from "@/components/ui/toaster";
@@ -35,19 +35,19 @@ import UserDashboardPage from './pages/dashboard/user/UserDashboardPage';
 import AdminDashboardPage from './pages/dashboard/admin/AdminDashboardPage';
 import SettingsPage from './pages/settings/SettingsPage';
 
-import NotFoundPage from './pages/NotFoundPage'; // Renamed from not-found.jsx
+import NotFoundPage from './pages/NotFoundPage';
 
 // A simple loading component for Suspense fallback
 const LoadingFallback = () => <div className="flex flex-grow flex-col items-center justify-center text-center py-10">Loading...</div>;
 
 function App() {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
+    // <ThemeProvider
+    //   attribute="class"
+    //   defaultTheme="system"
+    //   enableSystem
+    //   disableTransitionOnChange
+    // >
       <Router>
         <Layout>
           <Suspense fallback={<LoadingFallback />}>
@@ -87,7 +87,7 @@ function App() {
         </Layout>
         <Toaster />
       </Router>
-    </ThemeProvider>
+    // </ThemeProvider>
   );
 }
 

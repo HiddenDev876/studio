@@ -6,7 +6,7 @@ import { Menu, BotMessageSquare, X, Puzzle, UserCircle, LogIn, UserPlus, LayoutD
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { useTheme } from "next-themes";
+// import { useTheme } from "next-themes"; // Temporarily removed
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,8 +38,9 @@ export function Navbar() {
   const location = useLocation();
   const pathname = location.pathname;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
-  const { theme, setTheme } = useTheme();
-  
+  // const { theme, setTheme } = useTheme(); // Temporarily removed
+  const [currentTheme, setCurrentTheme] = React.useState("light"); // Placeholder
+
   // Mock authentication state - replace with actual auth logic
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false); // Mock admin state
@@ -53,28 +54,40 @@ export function Navbar() {
 
   const currentNavLinks = [...baseNavLinks];
 
-  const ThemeToggleButton = ({ isMobile = false }) => (
-    <Button
-      variant="ghost"
-      size={isMobile ? "default" : "icon"}
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className={isMobile ? "w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" : "h-9 w-9"}
-      aria-label="Toggle theme"
-    >
-      {theme === "light" ? (
-        <>
-          <Sun className={cn("h-5 w-5", isMobile && "mr-3")} />
-          {isMobile && <span>Light Mode</span>}
-        </>
-      ) : (
-        <>
-          <Moon className={cn("h-5 w-5", isMobile && "mr-3")} />
-          {isMobile && <span>Dark Mode</span>}
-        </>
-      )}
-      <span className="sr-only">Toggle theme</span>
-    </Button>
-  );
+  // Placeholder ThemeToggleButton as original is removed
+  const ThemeToggleButton = ({ isMobile = false }) => {
+    const toggleCurrentTheme = () => {
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      setCurrentTheme(newTheme);
+      // In a real scenario, you'd apply this to document.documentElement.classList
+      document.documentElement.classList.remove(currentTheme === "light" ? "light" : "dark");
+      document.documentElement.classList.add(newTheme);
+      console.log("Theme toggled to (manual):", newTheme);
+    };
+    return (
+      <Button
+        variant="ghost"
+        size={isMobile ? "default" : "icon"}
+        onClick={toggleCurrentTheme}
+        className={isMobile ? "w-full justify-start text-base font-medium py-2 px-2 mt-1 flex items-center" : "h-9 w-9"}
+        aria-label="Toggle theme (manual)"
+      >
+        {currentTheme === "light" ? (
+          <>
+            <Sun className={cn("h-5 w-5", isMobile && "mr-3")} />
+            {isMobile && <span>Light Mode</span>}
+          </>
+        ) : (
+          <>
+            <Moon className={cn("h-5 w-5", isMobile && "mr-3")} />
+            {isMobile && <span>Dark Mode</span>}
+          </>
+        )}
+        <span className="sr-only">Toggle theme (manual)</span>
+      </Button>
+    );
+  };
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
