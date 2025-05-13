@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview A content generation AI agent.
  *

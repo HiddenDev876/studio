@@ -1,4 +1,4 @@
-'use client'; 
+// 'use client'; // Removed: No longer needed for Vite React app
 
 import { ShieldCheck, Lock, FileText, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

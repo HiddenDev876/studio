@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { summarizeText } from "@/ai/flows/summarize-text";
+// Removed: import { summarizeText } from "@/ai/flows/summarize-text";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,9 +11,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, AlignLeft } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
+
 const formSchema = z.object({
   text: z.string().min(50, { message: "Text must be at least 50 characters to summarize effectively." }).max(20000, {message: "Text must be at most 20000 characters."}),
 });
+
+async function callSummarizeTextFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/summarizeTextFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
 
 export function SummarizeClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +48,7 @@ export function SummarizeClient() {
     setSummary(null);
     try {
       const input = { text: data.text };
-      const result = await summarizeText(input); // Direct call
+      const result = await callSummarizeTextFlow(input);
       setSummary(result.summary);
       toast({
         title: "Content Summarized!",
@@ -41,8 +57,8 @@ export function SummarizeClient() {
     } catch (error) {
       console.error("Error summarizing content:", error);
       toast({
-        title: "Error",
-        description: "Failed to summarize content. Please try again.",
+        title: "Error Summarizing Content",
+        description: error.message || "Failed to summarize content. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {

@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview An AI agent for transcribing speech to text.
  *

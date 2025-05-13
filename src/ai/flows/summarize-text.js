@@ -1,6 +1,3 @@
-
-'use server';
-
 /**
  * @fileOverview Summarizes a given text.
  *

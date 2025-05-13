@@ -1,10 +1,5 @@
 // Configuration
-// IMPORTANT: For a React app without Next.js API routes, this extension
-// would need to call a dedicated backend server where your Genkit flows are exposed.
-// The API_BASE_URL should point to that backend.
-// For this example, we'll assume such a backend exists at localhost:3001 (placeholder).
-// The original Next.js API routes (e.g., /api/ai/polish-email) are NO LONGER VALID.
-const API_BASE_URL = "http://localhost:3001"; // Placeholder for your dedicated AI backend
+const API_BASE_URL = "http://localhost:3400"; // Updated to common Genkit dev server port
 
 // --- Helper Functions ---
 
@@ -29,14 +24,14 @@ function displayError(toolPrefix, error) {
         console.error(`Error in ${toolPrefix}:`, error);
         let errorMessageText = `Error: ${error.message || 'An unknown error occurred.'}`;
         if (error.message && error.message.includes("Failed to fetch")) {
-            errorMessageText += " Ensure your AI backend server is running and accessible at " + API_BASE_URL;
+            errorMessageText += ` Ensure your AI backend server is running at ${API_BASE_URL} and the flow name is correct.`;
         }
         errorArea.textContent = errorMessageText;
         errorArea.style.display = 'block';
     }
     const outputArea = document.getElementById(`${toolPrefix}-output`);
     if (outputArea) {
-        outputArea.textContent = '';
+        outputArea.textContent = ''; // Clear previous results on error
     }
 }
 
@@ -49,12 +44,9 @@ function hideError(toolPrefix) {
     }
 }
 
-async function callApi(endpoint, body) {
-    // NOTE: The endpoint paths here (e.g., '/polish-email') are placeholders.
-    // You need to define these routes on your dedicated backend server that
-    // invokes the corresponding Genkit flows.
+async function callApi(flowName, body) {
     try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+        const response = await fetch(`${API_BASE_URL}/${flowName}`, { // Endpoint is now /<flowName>
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -65,23 +57,23 @@ async function callApi(endpoint, body) {
         if (!response.ok) {
             let errorMessage = `API Error: ${response.status} ${response.statusText}`;
             try {
-                const errorData = await response.json();
+                const errorData = await response.json(); // Try to parse error response
                 errorMessage = errorData.error || errorData.message || errorMessage;
             } catch (e) {
-                // Ignore if response is not JSON
+                // If response is not JSON, use the text
+                const textError = await response.text();
+                errorMessage = textError || errorMessage;
             }
             throw new Error(errorMessage);
         }
         return await response.json();
     } catch (error) {
         console.error("API Call failed:", error);
-        throw error;
+        throw error; // Re-throw to be caught by individual tool handlers
     }
 }
 
 // --- Event Listeners ---
-// NOTE: The API endpoints (e.g., '/polish-email') below are illustrative.
-// You would need to implement these on your backend server.
 
 document.getElementById('polish-button')?.addEventListener('click', async () => {
     const toolPrefix = 'polish';
@@ -93,9 +85,8 @@ document.getElementById('polish-button')?.addEventListener('click', async () => 
     hideError(toolPrefix);
     setLoading(toolPrefix, true);
     try {
-        // Example: your backend might expose a route like '/api/v1/polish-email'
-        const result = await callApi('/polish-email', { text: input }); 
-        displayResult(toolPrefix, result.improvedText); // Adjust based on your backend's response structure
+        const result = await callApi('improveWritingFlow', { text: input }); 
+        displayResult(toolPrefix, result.improvedText);
     } catch (error) {
         displayError(toolPrefix, error);
     } finally {
@@ -113,8 +104,8 @@ document.getElementById('summarize-button')?.addEventListener('click', async () 
     hideError(toolPrefix);
     setLoading(toolPrefix, true);
     try {
-        const result = await callApi('/summarize', { text: input });
-        displayResult(toolPrefix, result.summary); // Adjust based on your backend's response structure
+        const result = await callApi('summarizeTextFlow', { text: input });
+        displayResult(toolPrefix, result.summary);
     } catch (error) {
         displayError(toolPrefix, error);
     } finally {
@@ -132,8 +123,8 @@ document.getElementById('generate-button')?.addEventListener('click', async () =
     hideError(toolPrefix);
     setLoading(toolPrefix, true);
     try {
-        const result = await callApi('/generate-content', { prompt: prompt });
-        displayResult(toolPrefix, result.generatedContent); // Adjust
+        const result = await callApi('generateContentFlow', { prompt: prompt });
+        displayResult(toolPrefix, result.generatedContent); 
     } catch (error) {
         displayError(toolPrefix, error);
     } finally {
@@ -156,8 +147,8 @@ document.getElementById('translate-button')?.addEventListener('click', async () 
     hideError(toolPrefix);
     setLoading(toolPrefix, true);
     try {
-        const result = await callApi('/translate', { text, targetLanguage });
-        displayResult(toolPrefix, result.translatedText); // Adjust
+        const result = await callApi('translateTextFlow', { text, targetLanguage });
+        displayResult(toolPrefix, result.translatedText); 
     } catch (error) {
         displayError(toolPrefix, error);
     } finally {
@@ -175,8 +166,8 @@ document.getElementById('grammar-button')?.addEventListener('click', async () =>
     hideError(toolPrefix);
     setLoading(toolPrefix, true);
     try {
-        const result = await callApi('/grammar-check', { text: input });
-        displayResult(toolPrefix, result.correctedText); // Adjust
+        const result = await callApi('grammarCheckFlow', { text: input });
+        displayResult(toolPrefix, result.correctedText); 
     } catch (error) {
         displayError(toolPrefix, error);
     } finally {
@@ -184,17 +175,16 @@ document.getElementById('grammar-button')?.addEventListener('click', async () =>
     }
 });
 
-// Add a general message if the API_BASE_URL is still the default Next.js one.
-if (API_BASE_URL === "http://localhost:9002") {
-    console.warn("TextTransformer Extension: API_BASE_URL is set to the default Next.js development server. This extension now requires a separate backend server for AI functionalities after converting the main app to React. Please update API_BASE_URL in popup.js to point to your dedicated AI backend.");
-    const container = document.querySelector('.container');
-    if (container) {
-        const warningDiv = document.createElement('div');
-        warningDiv.textContent = "Note: This extension's AI features require a dedicated backend server. The current API URL may not work with the React-converted application. See console for details.";
-        warningDiv.style.backgroundColor = "yellow";
-        warningDiv.style.padding = "10px";
-        warningDiv.style.marginTop = "10px";
-        warningDiv.style.border = "1px solid orange";
-        container.insertBefore(warningDiv, container.firstChild);
-    }
+// Initial message to guide the user about the backend server if it's the default.
+const initialMessageContainer = document.querySelector('.container');
+if (initialMessageContainer && API_BASE_URL === "http://localhost:3400") {
+    const infoDiv = document.createElement('div');
+    infoDiv.textContent = `Ensure your Genkit AI backend is running and accessible at ${API_BASE_URL}. Start it with 'npm run genkit:dev' or 'npm run genkit:watch'.`;
+    infoDiv.style.backgroundColor = "#e6f7ff";
+    infoDiv.style.padding = "10px";
+    infoDiv.style.marginTop = "10px";
+    infoDiv.style.border = "1px solid #91d5ff";
+    infoDiv.style.borderRadius = "4px";
+    infoDiv.style.fontSize = "13px";
+    initialMessageContainer.insertBefore(infoDiv, initialMessageContainer.firstChild);
 }

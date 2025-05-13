@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview A grammar checking AI agent.
  *

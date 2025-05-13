@@ -1,5 +1,3 @@
-
-'use server';
 /**
  * @fileOverview A text improvement AI agent.
  *

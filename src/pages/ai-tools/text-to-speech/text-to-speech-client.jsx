@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { convertTextToSpeech } from "@/ai/flows/text-to-speech-flow";
+// Removed: import { convertTextToSpeech } from "@/ai/flows/text-to-speech-flow";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,10 +12,26 @@ import { Loader2, PlayCircle, VolumeX } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
 
 const formSchema = z.object({
   textToSpeak: z.string().min(5, { message: "Text must be at least 5 characters." }).max(1000, {message: "Text must be at most 1000 characters."}),
 });
+
+async function callConvertTextToSpeechFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/textToSpeechFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
+
 
 export function TextToSpeechClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -42,7 +58,7 @@ export function TextToSpeechClient() {
 
     try {
       const input = { textToSpeak: data.textToSpeak };
-      const result = await convertTextToSpeech(input); // Direct call
+      const result = await callConvertTextToSpeechFlow(input);
       
       if (result.audioDataUri && result.audioDataUri.startsWith("data:audio")) {
         setAudioDataUri(result.audioDataUri);
@@ -64,8 +80,8 @@ export function TextToSpeechClient() {
     } catch (error) {
       console.error("Error generating speech:", error);
       toast({
-        title: "Error",
-        description: "Failed to generate speech. Please try again.",
+        title: "Error Generating Speech",
+        description: error.message || "Failed to generate speech. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {
@@ -76,6 +92,7 @@ export function TextToSpeechClient() {
   useEffect(() => {
     if (audioDataUri && audioRef.current) {
       console.log("Setting audio source (conceptual):", audioDataUri);
+      // For actual audio, you might do: audioRef.current.src = audioDataUri; audioRef.current.load();
     }
   }, [audioDataUri]);
 
@@ -136,6 +153,7 @@ export function TextToSpeechClient() {
             <audio ref={audioRef} controls className="w-full" src={audioDataUri}>
               Your browser does not support the audio element.
             </audio>
+             <p className="text-xs text-muted-foreground">Data URI: {audioDataUri.substring(0,100)}...</p>
           </CardContent>
         </Card>
       )}

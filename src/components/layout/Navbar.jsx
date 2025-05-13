@@ -1,4 +1,4 @@
-"use client"; // Retain for useTheme, useState, useEffect
+// "use client"; // Removed: No longer needed for Vite React app
 
 import { Link, useLocation } from "react-router-dom";
 import React from "react"; // Ensure React is imported

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { translateText } from "@/ai/flows/translate-text";
+// Removed: import { translateText } from "@/ai/flows/translate-text";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, ChevronRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
 
 const supportedLanguages = [
   { code: "Spanish", name: "Spanish" },
@@ -32,6 +34,20 @@ const formSchema = z.object({
   targetLanguage: z.string({ required_error: "Please select a target language." }),
 });
 
+async function callTranslateTextFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/translateTextFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
+
 export function TranslateClient() {
   const [isLoading, setIsLoading] = useState(false);
   const [translatedText, setTranslatedText] = useState(null);
@@ -41,6 +57,7 @@ export function TranslateClient() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       text: "",
+      targetLanguage: supportedLanguages[0].code, // Default to first language
     },
   });
 
@@ -49,7 +66,7 @@ export function TranslateClient() {
     setTranslatedText(null);
     try {
       const input = { text: data.text, targetLanguage: data.targetLanguage };
-      const result = await translateText(input); // Direct call
+      const result = await callTranslateTextFlow(input);
       setTranslatedText(result.translatedText);
       toast({
         title: "Text Translated!",
@@ -58,8 +75,8 @@ export function TranslateClient() {
     } catch (error) {
       console.error("Error translating text:", error);
       toast({
-        title: "Error",
-        description: "Failed to translate text. Please try again.",
+        title: "Error Translating Text",
+        description: error.message || "Failed to translate text. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {

@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { transcribeSpeech } from "@/ai/flows/speech-to-text-flow";
+// Removed: import { transcribeSpeech } from "@/ai/flows/speech-to-text-flow";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,7 +12,23 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Loader2, Mic, StopCircle, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
+
 const formSchema = z.object({}); // No form inputs needed for microphone recording
+
+async function callTranscribeSpeechFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/speechToTextFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
 
 export function SpeechToTextClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -51,7 +67,7 @@ export function SpeechToTextClient() {
         variant: "destructive",
         title: "Unsupported Browser",
         description: "Your browser does not support microphone access.",
-      });
+        });
       return null;
     }
   };
@@ -104,7 +120,6 @@ export function SpeechToTextClient() {
     setIsListening(false);
     if (audioStreamRef.current) {
         audioStreamRef.current.getTracks().forEach(track => track.stop());
-        // audioStreamRef.current = null; // Commented out to potentially reuse stream if permission is sticky
     }
   };
 
@@ -129,7 +144,7 @@ export function SpeechToTextClient() {
     try {
       const audioDataUri = await readFileAsDataURI(audioBlob);
       const input = { audioDataUri };
-      const result = await transcribeSpeech(input); // Direct call
+      const result = await callTranscribeSpeechFlow(input);
       setTranscribedText(result.transcribedText);
       toast({
         title: "Transcription Complete!",
@@ -138,8 +153,8 @@ export function SpeechToTextClient() {
     } catch (error) {
       console.error("Error transcribing speech:", error);
       toast({
-        title: "Error",
-        description: error.message || "Failed to transcribe speech. Please try again.",
+        title: "Error Transcribing Speech",
+        description: error.message || "Failed to transcribe speech. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {

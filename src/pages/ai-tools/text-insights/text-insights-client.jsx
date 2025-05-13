@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { summarizeText } from "@/ai/flows/summarize-text"; // Using summarize as a proxy for insights
+// Removed: import { summarizeText } from "@/ai/flows/summarize-text"; 
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,9 +11,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, FileText } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
+
 const formSchema = z.object({
   text: z.string().min(20, { message: "Text must be at least 20 characters for meaningful insights." }).max(10000, {message: "Text must be at most 10000 characters."}),
 });
+
+async function callSummarizeTextFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/summarizeTextFlow`, { // Using summarizeTextFlow as proxy
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
+
 
 export function TextInsightsClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -33,9 +50,8 @@ export function TextInsightsClient() {
     try {
       const input = { text: data.text };
       // For "Text Insights", we'll use the summarizeText flow as a proxy.
-      // A more specific "insights" flow could be developed later.
-      const result = await summarizeText(input); // Direct call
-      setInsights(result.summary);
+      const result = await callSummarizeTextFlow(input);
+      setInsights(result.summary); // Assuming the 'insights' are the summary for now
       toast({
         title: "Insights Generated!",
         description: "Key insights/summary extracted from your text.",
@@ -43,8 +59,8 @@ export function TextInsightsClient() {
     } catch (error) {
       console.error("Error generating text insights:", error);
       toast({
-        title: "Error",
-        description: "Failed to generate insights. Please try again.",
+        title: "Error Generating Insights",
+        description: error.message || "Failed to generate insights. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {

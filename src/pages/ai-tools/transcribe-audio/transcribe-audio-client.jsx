@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { transcribeAudioFile } from "@/ai/flows/transcribe-audio-flow";
+// Removed: import { transcribeAudioFile } from "@/ai/flows/transcribe-audio-flow";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, UploadCloud, Languages } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
+
 const MAX_FILE_SIZE_MB = 10; 
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 const ACCEPTED_AUDIO_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4', 'audio/webm', 'audio/flac', 'audio/aac', 'audio/x-m4a', 'audio/m4a'];
@@ -21,6 +23,20 @@ const ACCEPTED_AUDIO_TYPES = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp4
 const formSchema = z.object({
   targetLanguage: z.string({ required_error: "Please select a target language." }),
 });
+
+async function callTranscribeAudioFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/transcribeAudioFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
 
 export function TranscribeAudioClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -94,7 +110,7 @@ export function TranscribeAudioClient() {
     try {
       const audioDataUri = await readFileAsDataURI(selectedFile);
       const input = { audioDataUri, targetLanguage: data.targetLanguage };
-      const result = await transcribeAudioFile(input); // Direct call
+      const result = await callTranscribeAudioFlow(input);
       setTranscribedText(result.transcribedText);
       toast({
         title: "Transcription Complete!",
@@ -103,8 +119,8 @@ export function TranscribeAudioClient() {
     } catch (error) {
       console.error("Error transcribing audio:", error);
       toast({
-        title: "Error",
-        description: "Failed to transcribe audio. Please try again.",
+        title: "Error Transcribing Audio",
+        description: error.message || "Failed to transcribe audio. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { improveWriting } from "@/ai/flows/improve-writing";
+// Removed: import { improveWriting } from "@/ai/flows/improve-writing";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,9 +11,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+const GENKIT_API_BASE_URL = "http://localhost:3400"; // Assuming Genkit dev server runs on 3400
+
 const formSchema = z.object({
   text: z.string().min(10, { message: "Email text must be at least 10 characters." }).max(5000, {message: "Email text must be at most 5000 characters."}),
 });
+
+async function callImproveWritingFlow(input) {
+  const response = await fetch(`${GENKIT_API_BASE_URL}/improveWritingFlow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(input),
+  });
+  if (!response.ok) {
+    const errorData = await response.text();
+    console.error("API Error Data:", errorData);
+    throw new Error(`API Error: ${response.status} - ${errorData || response.statusText}`);
+  }
+  return response.json();
+}
 
 export function PolishEmailClient() {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,7 +48,7 @@ export function PolishEmailClient() {
     setImprovedText(null);
     try {
       const input = { text: data.text };
-      const result = await improveWriting(input); // Direct call
+      const result = await callImproveWritingFlow(input);
       setImprovedText(result.improvedText);
       toast({
         title: "Email Polished!",
@@ -41,8 +57,8 @@ export function PolishEmailClient() {
     } catch (error) {
       console.error("Error polishing email:", error);
       toast({
-        title: "Error",
-        description: "Failed to polish email. Please try again.",
+        title: "Error Polishing Email",
+        description: error.message || "Failed to polish email. Please check console and ensure Genkit server is running.",
         variant: "destructive",
       });
     } finally {
