@@ -15,5 +15,4 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // Server configuration removed as requested
 })
