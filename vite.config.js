@@ -15,8 +15,5 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  server: {
-    port: 9002, // Default port for your app
-    host: '0.0.0.0', // Allows access from network
-  }
+  // Server configuration removed as requested
 })
