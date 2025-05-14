@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port 9002 --host 0.0.0.0",
     "genkit:dev": "genkit start src/ai/dev.js",
     "genkit:watch": "genkit start src/ai/dev.js",
     "build": "vite build",
