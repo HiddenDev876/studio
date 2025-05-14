@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "vite",
-    "genkit:dev": "genkit start -- tsx src/ai/dev.js",
-    "genkit:watch": "genkit start -- tsx --watch src/ai/dev.js",
+    "genkit:dev": "genkit start src/ai/dev.js",
+    "genkit:watch": "genkit start src/ai/dev.js",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -63,7 +63,6 @@
     "genkit-cli": "^1.8.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.1",
-    "vite": "^5.3.1",
-    "tsx": "^4.15.6"
+    "vite": "^5.3.1"
   }
 }
