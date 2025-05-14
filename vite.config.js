@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { fileURLToPath } from 'url';
 
 // https://vitejs.dev/config/
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 export default defineConfig({
   plugins: [react()],
   resolve: {
@@ -11,7 +15,7 @@ export default defineConfig({
     },
   },
   server: {
-    port: 9002, // Changed from 3000 to align with package.json
-    host: '0.0.0.0', // Explicitly set host
+    port: 9002,
+    host: '0.0.0.0',
   }
 })
